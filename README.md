@@ -8,7 +8,7 @@
 
 ![version](https://img.shields.io/badge/version-v1.4-brightgreen)
 ![platform](https://img.shields.io/badge/platform-Android%208.0%2B-blue)
-![license](https://img.shields.io/badge/license-Proprietary-lightgrey)
+![license](https://img.shields.io/badge/license-MIT-blue)
 
 **📖 设备内核（lamda）官方文档：[device-farm.com/docs/zh/quick-start](https://device-farm.com/docs/zh/quick-start)**
 
@@ -31,6 +31,7 @@
 - [构建](#构建)
 - [发布规范](#发布规范)
 - [目录结构](#目录结构)
+- [开源许可](#开源许可)
 - [免责声明](#免责声明)
 
 ---
@@ -302,6 +303,10 @@ app/
 ├── docs/                                # 截图等文档资源
 └── keystore.properties                  # 签名配置（不入库）
 ```
+
+## 开源许可
+
+本项目基于 [MIT License](LICENSE) 开源（Copyright © 2026 歪比巴卜）。设备内核 lamda / FIRERPA 相关能力与文档版权归其上游项目所有。
 
 ## 免责声明
 
