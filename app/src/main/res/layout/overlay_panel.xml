@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="6dp">
+
+    <ImageView
+        android:id="@+id/overlayBall"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:background="@drawable/overlay_ball_bg"
+        android:contentDescription="@string/overlay_title"
+        android:padding="11dp"
+        android:src="@drawable/ic_overlay_control" />
+
+    <LinearLayout
+        android:id="@+id/overlayActions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/overlayToggle"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:background="@drawable/overlay_btn_bg"
+            android:contentDescription="@string/license_script_pause"
+            android:padding="10dp"
+            android:src="@drawable/ic_overlay_play" />
+
+        <ImageView
+            android:id="@+id/overlayStop"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/overlay_btn_bg"
+            android:contentDescription="@string/license_script_stop"
+            android:padding="10dp"
+            android:src="@drawable/ic_overlay_stop" />
+
+        <ImageView
+            android:id="@+id/overlayHome"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/overlay_btn_bg"
+            android:contentDescription="@string/overlay_home"
+            android:padding="10dp"
+            android:src="@drawable/ic_overlay_home" />
+    </LinearLayout>
+</LinearLayout>

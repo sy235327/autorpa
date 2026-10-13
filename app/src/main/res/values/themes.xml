@@ -1,0 +1,103 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.Firerpa" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:colorBackground">@color/surfaceCanvas</item>
+        <item name="colorPrimary">@color/buttonPrimary</item>
+        <item name="colorOnPrimary">@color/buttonPrimaryText</item>
+        <item name="colorSecondary">@color/navActive</item>
+        <item name="colorSurface">@color/panelSurface</item>
+        <item name="colorOnSurface">@color/textStrong</item>
+        <item name="colorOnSurfaceVariant">@color/textMuted</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Firerpa.MaterialAlertDialog</item>
+        <item name="android:navigationBarColor" tools:targetApi="o_mr1">@color/surfaceCanvas</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/surfaceCanvas</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+    </style>
+
+    <style name="ThemeOverlay.Firerpa.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorSurface">@color/panelSurface</item>
+        <item name="colorOnSurface">@color/textStrong</item>
+        <item name="colorOnSurfaceVariant">@color/textMuted</item>
+        <item name="colorPrimary">@color/navActive</item>
+    </style>
+
+    <style name="Widget.Firerpa.Button.Primary" parent="Widget.Material3.Button">
+        <item name="android:textColor">@color/buttonPrimaryText</item>
+        <item name="backgroundTint">@color/buttonPrimary</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+
+    <style name="Widget.Firerpa.Button.Tonal" parent="Widget.Material3.Button">
+        <item name="android:textColor">@color/buttonTonalText</item>
+        <item name="backgroundTint">@color/buttonTonal</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+
+    <style name="Widget.Firerpa.Button.Stop" parent="Widget.Material3.Button">
+        <item name="android:textColor">@color/buttonStopText</item>
+        <item name="backgroundTint">@color/buttonStop</item>
+        <item name="iconTint">@color/buttonStopText</item>
+        <item name="rippleColor">@color/dangerSoft</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+
+    <style name="Widget.Firerpa.Button.DangerOutline" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:textColor">@color/danger</item>
+        <item name="strokeColor">@color/danger</item>
+        <item name="rippleColor">@color/dangerSoft</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+
+    <style name="Widget.Firerpa.NavIndicator.Hidden" parent="">
+        <item name="android:width">0dp</item>
+        <item name="android:height">0dp</item>
+        <item name="android:color">@android:color/transparent</item>
+    </style>
+
+    <style name="Widget.Firerpa.NavIndicator" parent="">
+        <item name="android:width">56dp</item>
+        <item name="android:height">44dp</item>
+        <item name="android:color">@color/navIndicator</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Firerpa.NavIndicator</item>
+    </style>
+
+    <style name="ShapeAppearance.Firerpa.NavIndicator" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="TextAppearance.Firerpa.Nav.Active" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/navActive</item>
+    </style>
+
+    <style name="TextAppearance.Firerpa.Nav.Inactive" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/navInactive</item>
+    </style>
+
+    <style name="Widget.Firerpa.TextInput.Inline" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundMode">none</item>
+        <item name="hintEnabled">false</item>
+        <item name="endIconTint">@color/textMuted</item>
+    </style>
+</resources>
