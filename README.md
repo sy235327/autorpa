@@ -1,5 +1,7 @@
 <div align="center">
 
+**简体中文 | [English](README.en.md)**
+
 # AutoRPA
 
 **开箱即用的安卓 RPA 自动化控制平台（客户端）**

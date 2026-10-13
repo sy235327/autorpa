@@ -31,6 +31,7 @@
 | 22 | 品牌与包名（`strings.xml` ×3、`build.gradle.kts`、`keystore.properties`） | FIRERPA → **AutoRPA**（应用名 / hero 徽章 / 副标题 / 通知标题）；`applicationId`：`com.rpac.console`（占位）→ **`com.autorpa.console`**（正式包名，首发后不可再变更，否则用户无法覆盖安装）；新增独立发布签名 `autorpa-release.jks`（RSA2048 / 30 年；`keystore.properties`、`*.keystore`、`*.jks` 已加入 `.gitignore`，备份于 `..\_release-keys\`） | v1.4 公开发布 |
 | 23 | `README.md`、`release/`、`docs/` | 项目介绍 README（功能 / 原理 / 快速开始 / FAQ / 构建 / 发布规范）；`release/AutoRPA-vX.Y.apk` 随 tag 提交 → 用户可直接从仓库下载；`docs/screenshot-*.png` 截图 | v1.4 公开发布 |
 | 24 | `README.md`（扩写） | 补充：系统组成（客户端/服务端/内核）、服务端架构与组件端口表、**远程设备 4 种接入机制**（p2p/direct/forward/oneway）+ 远程控制台说明、2 张 mermaid 图（完整业务流程时序 + 接入机制图）、服务端部署说明、device-farm 官方文档导航 | 用户反馈文档信息太少 |
+| 25 | `README.en.md`（新增） | 英文版 README（与中文版同构：系统组成 / 服务端 / 接入机制 / 流程图 / 构建 / 发布）；两个 README 顶部互相加语言切换 | 面向英文用户 |
 
 ## 已知待办（M3 后续）
 
