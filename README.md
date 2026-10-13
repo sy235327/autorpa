@@ -23,11 +23,13 @@
 - [项目简介](#项目简介)
 - [系统组成](#系统组成)
 - [功能特性](#功能特性)
+- [界面截图](#界面截图)
 - [系统架构](#系统架构)
 - [远程安卓设备接入机制](#远程安卓设备接入机制)
 - [完整业务流程图](#完整业务流程图)
 - [快速开始](#快速开始)
 - [服务端说明](#服务端说明)
+- [AI 技能包](#ai-技能包)
 - [常见问题](#常见问题)
 - [相关文档](#相关文档)
 - [构建](#构建)
@@ -44,15 +46,16 @@
 
 | 组成 | 说明 | 本仓库 |
 |---|---|---|
-| **AutoRPA App（客户端）** | 用户侧的安卓应用：卡密激活、脚本启停、悬浮窗控制、自动更新 | ✅ 本仓库 |
-| **授权服务器（服务端）** | 运营方自部署：卡密/批次/分组管理、脚本与版本发布、任务调度、设备远程控制台 | 私有部署 |
+| **AutoRPA App（客户端）** | 用户侧的安卓应用：卡密激活、脚本启停、悬浮窗控制、自动更新 | ✅ 本仓库（根目录） |
+| **授权服务器（服务端）** | 运营方自部署：卡密/批次/分组管理、脚本与版本发布、任务调度、设备远程控制台 | ✅ 本仓库 [`server/`](server/)（PIGEON 二开） |
 | **设备内核（lamda）** | 运行在设备上的自动化执行引擎：UI 自动化、OCR、图像匹配、Frida、抓包等 | [开源上游](https://github.com/firerpa/lamda) |
+| **AI 技能包（Agent Skill）** | 供 AI 编程助手（OpenCode / Claude / Cursor 等）使用的 FIRERPA/lamda 脚本编写技能：设备巡检、UI 选择器校验、脚本生成与验证 | ✅ 本仓库 [`skill/`](skill/) |
 
 整体流程一句话：
 
 > 运营方在后台**批量生成卡密**并下发**自动化脚本** → 用户在 App 内**输入卡密激活设备** → 一键**启动脚本**，设备自动执行任务。
 
-<img src="docs/screenshot-license.png" width="320" alt="AutoRPA 卡密页" />
+<img src="docs/app-license.png" width="320" alt="AutoRPA 卡密页" />
 
 App 负责「授权 + 控制 + 守护」，真正的自动化执行由设备端 lamda 内核完成（支持 root / Shizuku 多级权限）。
 
@@ -94,6 +97,26 @@ App 负责「授权 + 控制 + 守护」，真正的自动化执行由设备端 
 | 任务通道 | 实时任务下发、执行跟踪、状态回传；作业自愈（暂停恢复后保持原版本） |
 | 远程控制台 | 浏览器直连设备 WebUI：远程桌面、内置终端、ADB、文件、抓包等 |
 | 管理界面 | Vue 单页控制台（卡密/作业/设备/分组/审计），支持中英文 |
+
+## 界面截图
+
+### 客户端（AutoRPA App）
+
+| 卡密页 | 新增卡密 | 悬浮窗面板 |
+|---|---|---|
+| ![卡密页](docs/app-license.png) | ![新增卡密](docs/app-add-card.png) | ![悬浮窗面板](docs/app-overlay.png) |
+
+### 服务端管理控制台
+
+| 卡密管理 | 脚本与版本 | 作业列表 |
+|---|---|---|
+| ![卡密管理](docs/admin-cards.png) | ![脚本管理](docs/admin-script.png) | ![作业列表](docs/admin-jobs.png) |
+
+| 设备管理 | 设备总览（远控入口） | 远程控制台 |
+|---|---|---|
+| ![设备管理](docs/admin-devices.png) | ![远控列表](docs/admin-remote-list.png) | ![远程控制台](docs/admin-remote-control.png) |
+
+> 远程控制台里可以看到设备的实时画面，并使用内置终端、ADB、抓包等能力（见下文「远程安卓设备接入机制」）。
 
 ## 系统架构
 
@@ -140,6 +163,8 @@ App 负责「授权 + 控制 + 守护」，真正的自动化执行由设备端 
 - **内置终端 / ADB**：命令行操作设备
 - **设备 HTTP 代理 / 抓包**：调试网络请求
 - **文件管理 / OCR / 图像匹配 / Frida** 等调试能力
+
+![远程控制台](docs/admin-remote-control.png)
 
 > 设备内核各能力的详细说明见官方文档：[远程桌面](https://device-farm.com/docs/zh/remote-desktop)、[内置终端](https://device-farm.com/docs/zh/built-in-terminal)、[内置 ADB](https://device-farm.com/docs/zh/built-in-adb)、[分布式及内网穿透](https://device-farm.com/docs/zh/distributed-deployment)。
 
@@ -215,14 +240,43 @@ flowchart LR
 | 运维 | 设备远程控制台、审计日志、作业自愈（暂停/重启后恢复原版本） |
 | 控制台 | Vue 管理界面：卡密 / 批次 / 作业 / 设备 / 分组 / 审计 / App 版本发布 |
 
-部署要点（详见上游文档）：
+部署要点：
+
+> 服务端源码位于本仓库 [`server/`](server/)（PIGEON 二开，含完整卡密授权体系与管理控制台）。
+> 注意：IP 地理库 `executor/IPDB.BIN`（约 170MB，超代码托管单文件限制）**不随仓库分发**，部署前请将其放入 `server/executor/`。
 
 ```bash
-cp -pr docker ~/pigeon && cd ~/pigeon
-cp .env.example .env   # 按说明修改（域名、IP、口令）
-docker compose -f docker-compose.yml up -d
+# 在仓库根目录
+cd server && docker build -t pigeon-fork:1.0 .   # 或：docker compose -f docker/docker-compose.yml build
+cp docker/.env.example docker/.env               # 按说明修改（域名、IP、口令）
+docker compose -f docker/docker-compose.yml up -d
 # 浏览器访问 http://<服务器IP>:8000（默认账号 admin/pigeon，请立即修改）
 ```
+
+## AI 技能包
+
+[`skill/`](skill/) 是一个面向 **AI 编程助手**（OpenCode / Claude / Cursor 等）的技能包，用于让 AI 参与编写与验证 FIRERPA / lamda 自动化脚本：
+
+| 内容 | 说明 |
+|---|---|
+| [`skill/firerpa/SKILL.md`](skill/firerpa/SKILL.md) | 技能定义与 Agent 使用规则（产出可复用的 lamda Python 脚本） |
+| [`skill/firerpa/scripts/firerpa.py`](skill/firerpa/scripts/firerpa.py) | 统一 CLI：连通性检查、应用预检、UI 巡检、选择器校验、点击/输入等 |
+| [`skill/firerpa/client/`](skill/firerpa/client/) | lamda Python 客户端（`from lamda.client import *`）与 gRPC 协议定义 |
+| [`skill/firerpa/references/`](skill/firerpa/references/) | 官方文档离线全文（llms-full.txt / reference.md），供 AI 检索 |
+
+典型用法：
+
+```bash
+cd skill/firerpa
+pip install -r requirements.txt
+
+python3 scripts/firerpa.py device-info --host <设备IP>     # 设备/服务信息
+python3 scripts/firerpa.py dump --host <设备IP> -o ui.xml   # 抓取当前 UI 树
+python3 scripts/firerpa.py app-current --host <设备IP>      # 当前前台应用
+# 将任务描述 + 上述输出交给 AI → 生成可复用脚本 → 再用 CLI 校验
+```
+
+> 配套阅读：设备内核文档 [快速开始](https://device-farm.com/docs/zh/quick-start) 与 [API 入门](https://device-farm.com/docs/zh/api-prepare)。
 
 ## 常见问题
 
@@ -301,6 +355,8 @@ app/
 │   ├── service/ …                       # 内核实装与管理（下载/启动/卸载）
 │   └── ui/ …                            # 主页/配置/日志页
 ├── app/src/main/res/                    # 资源（多语言：zh / en）
+├── server/                              # 授权服务器源码（PIGEON 二开：卡密/分组/作业/版本/控制台）
+├── skill/                               # AI 技能包（FIRERPA/lamda 脚本编写，供 AI 助手使用）
 ├── release/                             # 发布版 APK（随 tag 提交）
 ├── docs/                                # 截图等文档资源
 └── keystore.properties                  # 签名配置（不入库）

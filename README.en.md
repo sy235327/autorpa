@@ -23,11 +23,13 @@ Card-key licensing · Remote device management · UI automation · Floating over
 - [Introduction](#introduction)
 - [System Components](#system-components)
 - [Features](#features)
+- [Screenshots](#screenshots)
 - [Architecture](#architecture)
 - [Remote Device Access Modes](#remote-device-access-modes)
 - [End-to-End Flow](#end-to-end-flow)
 - [Quick Start](#quick-start)
 - [Server Side](#server-side)
+- [AI Skill Package](#ai-skill-package)
 - [FAQ](#faq)
 - [Documentation](#documentation)
 - [Build](#build)
@@ -44,15 +46,16 @@ Card-key licensing · Remote device management · UI automation · Floating over
 
 | Part | Description | This repo |
 |---|---|---|
-| **AutoRPA App (client)** | User-facing Android app: card-key activation, script start/stop, floating overlay, auto-update | ✅ Yes |
-| **Authorization Server** | Self-hosted by the operator: card/batch/group management, script & version publishing, task scheduling, remote device console | Private deployment |
+| **AutoRPA App (client)** | User-facing Android app: card-key activation, script start/stop, floating overlay, auto-update | ✅ This repo (root) |
+| **Authorization Server** | Self-hosted by the operator: card/batch/group management, script & version publishing, task scheduling, remote device console | ✅ This repo [`server/`](server/) (PIGEON fork) |
 | **Device Kernel (lamda)** | On-device automation engine: UI automation, OCR, image matching, Frida, packet capture, etc. | [Open-source upstream](https://github.com/firerpa/lamda) |
+| **AI Skill Package** | A skill for AI coding agents (OpenCode / Claude / Cursor…): inspect devices, validate UI selectors, generate and verify FIRERPA/lamda automation scripts | ✅ This repo [`skill/`](skill/) |
 
 In one sentence:
 
 > The operator **generates card keys in bulk** and publishes **automation scripts** → the user **activates the device with a card key** in the app → taps **Start Script** and the device executes tasks automatically.
 
-<img src="docs/screenshot-license.png" width="320" alt="AutoRPA license page" />
+<img src="docs/app-license.png" width="320" alt="AutoRPA license page" />
 
 The app handles *licensing + control + supervision*, while actual automation is executed by the on-device **lamda** kernel (running with root or Shizuku privileges).
 
@@ -94,6 +97,26 @@ The app handles *licensing + control + supervision*, while actual automation is 
 | Task channel | Real-time task dispatch, execution tracking, status reporting; job self-healing (keeps running version after pause) |
 | Remote console | Browser access to the device WebUI: remote desktop, built-in terminal, ADB, files, capture, etc. |
 | Admin console | Vue SPA (cards / jobs / devices / groups / audit), Chinese & English UI |
+
+## Screenshots
+
+### Client (AutoRPA App)
+
+| Cards | Add card | Floating overlay |
+|---|---|---|
+| ![Cards](docs/app-license.png) | ![Add card](docs/app-add-card.png) | ![Overlay](docs/app-overlay.png) |
+
+### Server admin console
+
+| Cards | Scripts & versions | Jobs |
+|---|---|---|
+| ![Cards](docs/admin-cards.png) | ![Scripts](docs/admin-script.png) | ![Jobs](docs/admin-jobs.png) |
+
+| Devices | Remote overview | Remote console |
+|---|---|---|
+| ![Devices](docs/admin-devices.png) | ![Remote list](docs/admin-remote-list.png) | ![Remote console](docs/admin-remote-control.png) |
+
+> The remote console shows the live device screen and provides the built-in terminal, ADB, packet capture and more (see "Remote Device Access Modes").
 
 ## Architecture
 
@@ -143,6 +166,8 @@ Regardless of mode, the operator can open the **remote console** in a browser �
 - **Built-in terminal / ADB**: run shell commands on the device
 - **Device HTTP proxy / packet capture**: debug network traffic
 - **File manager / OCR / image matching / Frida** and more
+
+![Remote console](docs/admin-remote-control.png)
 
 > See the official docs for details: [Remote desktop](https://device-farm.com/docs/zh/remote-desktop) · [Built-in terminal](https://device-farm.com/docs/zh/built-in-terminal) · [Built-in ADB](https://device-farm.com/docs/zh/built-in-adb) · [Distributed deployment & NAT traversal](https://device-farm.com/docs/zh/distributed-deployment).
 
@@ -218,14 +243,43 @@ Deployed by the operator (single `docker compose up`), the server is responsible
 | Operations | Remote console, audit log, job self-healing (keeps the running version across pause/restart) |
 | Admin console | Vue console: cards / batches / jobs / devices / groups / audit / app release management |
 
-Deployment essentials (see upstream docs for details):
+Deployment essentials:
+
+> The server source lives in this repo under [`server/`](server/) (a PIGEON fork with the full card-licensing system and admin console).
+> Note: the IP geolocation database `executor/IPDB.BIN` (~170 MB, over hosting per-file limits) is **not** distributed with this repo — place it into `server/executor/` before deploying.
 
 ```bash
-cp -pr docker ~/pigeon && cd ~/pigeon
-cp .env.example .env   # edit domain, IPs and credentials as documented
-docker compose -f docker-compose.yml up -d
+# from the repository root
+cd server && docker build -t pigeon-fork:1.0 .   # or: docker compose -f docker/docker-compose.yml build
+cp docker/.env.example docker/.env               # edit domain, IPs and credentials as documented
+docker compose -f docker/docker-compose.yml up -d
 # then open http://<server-ip>:8000 (default account admin/pigeon — change it immediately)
 ```
+
+## AI Skill Package
+
+[`skill/`](skill/) contains a skill package for **AI coding agents** (OpenCode / Claude / Cursor…), enabling them to author and verify FIRERPA / lamda automation scripts:
+
+| Item | Description |
+|---|---|
+| [`skill/firerpa/SKILL.md`](skill/firerpa/SKILL.md) | Skill definition & agent rules (produce reusable lamda Python scripts) |
+| [`skill/firerpa/scripts/firerpa.py`](skill/firerpa/scripts/firerpa.py) | Unified CLI: connectivity checks, app prechecks, UI inspection, selector checks, tap/type actions |
+| [`skill/firerpa/client/`](skill/firerpa/client/) | lamda Python client (`from lamda.client import *`) and gRPC protos |
+| [`skill/firerpa/references/`](skill/firerpa/references/) | Offline copies of the official docs (llms-full.txt / reference.md) for AI retrieval |
+
+Typical usage:
+
+```bash
+cd skill/firerpa
+pip install -r requirements.txt
+
+python3 scripts/firerpa.py device-info --host <device-ip>     # device / service info
+python3 scripts/firerpa.py dump --host <device-ip> -o ui.xml  # dump the current UI tree
+python3 scripts/firerpa.py app-current --host <device-ip>     # foreground app
+# give the task + these outputs to your AI agent -> generate a reusable script -> verify via the CLI
+```
+
+> Recommended reading: kernel docs [Quick Start](https://device-farm.com/docs/zh/quick-start) and [API primer](https://device-farm.com/docs/zh/api-prepare).
 
 ## FAQ
 
@@ -304,6 +358,8 @@ app/
 │   ├── service/ ...                     # kernel installation & management (download / start / remove)
 │   └── ui/ ...                          # home / config / log pages
 ├── app/src/main/res/                    # resources (i18n: zh / en)
+├── server/                              # authorization server source (PIGEON fork: cards/groups/jobs/versions/console)
+├── skill/                               # AI skill package (FIRERPA/lamda script authoring for AI agents)
 ├── release/                             # released APKs (committed with tags)
 ├── docs/                                # screenshots and doc assets
 └── keystore.properties                  # signing config (not committed)

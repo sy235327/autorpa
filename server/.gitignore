@@ -1,0 +1,6 @@
+# 运行时大文件（不随仓库分发，部署前放入 executor/IPDB.BIN）
+executor/IPDB.BIN
+# 运行期数据 / 日志
+docker/data/
+*.log
+__pycache__/

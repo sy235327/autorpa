@@ -1,0 +1,4 @@
+.git
+docker/data
+*.log
+vue/node_modules

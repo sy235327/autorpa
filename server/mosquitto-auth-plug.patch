@@ -1,0 +1,52 @@
+diff --git a/Makefile b/Makefile
+index 12bc2cc..50c2590 100644
+--- a/Makefile
++++ b/Makefile
+@@ -138,7 +138,6 @@ LDFLAGS := $(CFG_LDFLAGS)
+ LDFLAGS += $(BE_LDFLAGS) -L$(MOSQUITTO_SRC)/lib/
+ # LDFLAGS += -Wl,-rpath,$(../../../../pubgit/MQTT/mosquitto/lib) -lc
+ # LDFLAGS += -export-dynamic
+-LDADD = $(BE_LDADD) $(OSSLIBS) -lmosquitto
+ 
+ all: printconfig auth-plug.so np
+ 
+@@ -157,7 +156,7 @@ printconfig:
+ 
+ 
+ auth-plug.so : $(OBJS) $(BE_DEPS)
+-	$(CC) $(CFLAGS) $(LDFLAGS) -fPIC -shared -o $@ $(OBJS) $(BE_DEPS) $(LDADD)
++	$(CC) $(CFLAGS) -fPIC -shared -o $@ $(OBJS) $(BE_DEPS) $(LDFLAGS) $(LDADD)
+ 
+ be-redis.o: be-redis.c be-redis.h log.h hash.h envs.h Makefile
+ be-memcached.o: be-memcached.c be-memcached.h log.h hash.h envs.h Makefile
+diff --git a/auth-plug.c b/auth-plug.c
+index 3456ba0..699e292 100644
+--- a/auth-plug.c
++++ b/auth-plug.c
+@@ -499,7 +499,7 @@ int mosquitto_auth_security_cleanup(void *userdata, struct mosquitto_auth_opt *a
+ 
+ 
+ #if MOSQ_AUTH_PLUGIN_VERSION >=3
+-int mosquitto_auth_unpwd_check(void *userdata, const struct mosquitto *client, const char *username, const char *password)
++int mosquitto_auth_unpwd_check(void *userdata, struct mosquitto *client, const char *username, const char *password)
+ #else
+ int mosquitto_auth_unpwd_check(void *userdata, const char *username, const char *password)
+ #endif
+@@ -594,7 +594,7 @@ int mosquitto_auth_unpwd_check(void *userdata, const char *username, const char
+ }
+ 
+ #if MOSQ_AUTH_PLUGIN_VERSION >= 3
+-int mosquitto_auth_acl_check(void *userdata, int access, const struct mosquitto *client, const struct mosquitto_acl_msg *msg)
++int mosquitto_auth_acl_check(void *userdata, int access, struct mosquitto *client, const struct mosquitto_acl_msg *msg)
+ #else
+ int mosquitto_auth_acl_check(void *userdata, const char *clientid, const char *username, const char *topic, int access)
+ #endif
+@@ -745,7 +745,7 @@ int mosquitto_auth_acl_check(void *userdata, const char *clientid, const char *u
+ 
+ 
+ #if MOSQ_AUTH_PLUGIN_VERSION >= 3
+-int mosquitto_auth_psk_key_get(void *userdata, const struct mosquitto *client, const char *hint, const char *identity, char *key, int max_key_len)
++int mosquitto_auth_psk_key_get(void *userdata, struct mosquitto *client, const char *hint, const char *identity, char *key, int max_key_len)
+ #else
+ int mosquitto_auth_psk_key_get(void *userdata, const char *hint, const char *identity, char *key, int max_key_len)
+ #endif

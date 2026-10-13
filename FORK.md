@@ -32,6 +32,7 @@
 | 23 | `README.md`、`release/`、`docs/` | 项目介绍 README（功能 / 原理 / 快速开始 / FAQ / 构建 / 发布规范）；`release/AutoRPA-vX.Y.apk` 随 tag 提交 → 用户可直接从仓库下载；`docs/screenshot-*.png` 截图 | v1.4 公开发布 |
 | 24 | `README.md`（扩写） | 补充：系统组成（客户端/服务端/内核）、服务端架构与组件端口表、**远程设备 4 种接入机制**（p2p/direct/forward/oneway）+ 远程控制台说明、2 张 mermaid 图（完整业务流程时序 + 接入机制图）、服务端部署说明、device-farm 官方文档导航 | 用户反馈文档信息太少 |
 | 25 | `README.en.md`（新增） | 英文版 README（与中文版同构：系统组成 / 服务端 / 接入机制 / 流程图 / 构建 / 发布）；两个 README 顶部互相加语言切换 | 面向英文用户 |
+| 26 | 仓库结构：`server/`、`skill/`、`docs/*.png` | **单仓多组件**：pigeon 二开服务端源码复制到 `server/`（排除 IPDB.BIN 170MB，加 `server/.gitignore`）；AI 技能包复制到 `skill/`；9 张界面截图入库（app 3 张 + 管理端 6 张）；两个 README 增加「界面截图」画廊 + 「AI 技能包」章节 + 服务端源码/部署说明 + `server/` `skill/` 目录说明 | 用户要求同仓发布 + 文档配图 |
 
 ## 已知待办（M3 后续）
 
