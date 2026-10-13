@@ -28,6 +28,8 @@
 | 19 | `LicenseController`（lamda 保障） | 激活成功 / 点击启动脚本时，自动确保设备端 lamda 服务在运行（root 执行 launch.sh） | M3 |
 | 20 | 悬浮窗改版 | 收起时仅小圆点（可拖动）；点击展开 [启动/暂停][结束][回主页] 三个图标按钮；无文字、无 ✕；删除长按关闭（关闭 = 回 app 关开关） | M3 |
 | 21 | `LicenseController.kt` | 卡密错误中文化（设备被拉黑 / 口令输错被锁定）；`/me` 返回 `blacklisted` 时状态面板显示「⚠ 该设备已被管理员拉黑…」；App 更新提示改为版本语义化比较（仅后台版本更高才提示，`1.3-10-gxxxx` 形式正确比较），弹窗当前版本去掉 git 后缀显示 | M3 |
+| 22 | 品牌与包名（`strings.xml` ×3、`build.gradle.kts`、`keystore.properties`） | FIRERPA → **AutoRPA**（应用名 / hero 徽章 / 副标题 / 通知标题）；`applicationId`：`com.rpac.console`（占位）→ **`com.autorpa.console`**（正式包名，首发后不可再变更，否则用户无法覆盖安装）；新增独立发布签名 `autorpa-release.jks`（RSA2048 / 30 年；`keystore.properties`、`*.keystore`、`*.jks` 已加入 `.gitignore`，备份于 `..\_release-keys\`） | v1.4 公开发布 |
+| 23 | `README.md`、`release/`、`docs/` | 项目介绍 README（功能 / 原理 / 快速开始 / FAQ / 构建 / 发布规范）；`release/AutoRPA-vX.Y.apk` 随 tag 提交 → 用户可直接从仓库下载；`docs/screenshot-*.png` 截图 | v1.4 公开发布 |
 
 ## 已知待办（M3 后续）
 
